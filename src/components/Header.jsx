@@ -39,11 +39,10 @@ const Header = () => {
         </div>
       </div>
       <div className="pr-[10px] flex gap-2 items-center">
-        <Link to={"/cart"}>
-        <div className="bg-green-600 py-[6px] px-5 text-xl rounded-2xl cursor-pointer text-white">
+        
+        <div onClick={() => user ? navigate('/cart') : navigate('/login') } className="bg-green-600 py-[6px] px-5 text-xl rounded-2xl cursor-pointer text-white">
           Cart <i className="bi bi-cart4 "></i>
         </div>
-        </Link>
         {user ? (
           <div
             className="relative"

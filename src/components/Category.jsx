@@ -35,7 +35,7 @@ const Category = () => {
   return (
     <div className="flex items-center justify-evenly mt-8">
       <div className="cursor-pointer flex flex-col gap-3" onClick={handleAll}>
-        <div className="w-24  rounded-full shadow-lg overflow-hidden">
+        <div className="w-24  rounded-full shadow-lg overflow-hidden ">
           <img src="/images/all.png" alt="All" className="object-cover "></img>
         </div>
         <h3 className="text-center ">ALL</h3>

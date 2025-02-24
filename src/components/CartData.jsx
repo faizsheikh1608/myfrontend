@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import Items from './Items';
+import AddTo from './AddTo';
 import axios from 'axios';
 import ShimmerUI from './ShimmerUI';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const CartData = () => {
   const [data, setData] = useState(null);
-  const [total,setTotal] = useState(0);
+  const [total, setTotal] = useState(0);
   const navigate = useNavigate();
+  const user = useSelector((store) => store.user);
 
   const fetchData = async () => {
     try {
@@ -30,11 +33,7 @@ const CartData = () => {
     try {
       // Optimistically remove the item from the UI
       const updatedItems = data.filter((item) => item.productId !== productId);
-      setData(updatedItems);
-      
-
-
-     
+      setData(updatedItems.length > 0 ? updatedItems : null);
 
       // Send the delete request to the server
       await axios.delete(`http://localhost:3000/cart/removeItem/${productId}`, {
@@ -42,20 +41,27 @@ const CartData = () => {
       });
     } catch (err) {
       console.log(err);
-      fetchData(); 
+      fetchData();
     }
   };
 
-  if(!data){
-    return <ShimmerUI/>
+  if (!data || data.length === 0) {
+    return <AddTo />;
   }
 
   return (
-    <div className="flex justify-evenly gap-8  p-6">
+   
+     <div className="flex justify-evenly gap-8  p-6">
       <div id="items" className="w-[700px]">
         {data.map((items) => {
-         
-          return <Items key={items._id} item={items} setTotal={setTotal} removeItem={removeItem}/>;
+          return (
+            <Items
+              key={items._id}
+              item={items}
+              setTotal={setTotal}
+              removeItem={removeItem}
+            />
+          );
         })}
       </div>
       <div
@@ -75,7 +81,10 @@ const CartData = () => {
           <p className="text-black text-lg font-semibold">Subtotal</p>
           <p className="text-black text-lg font-semibold">₹{total}</p>
         </div>
-        <div onClick={() => navigate('/address')} className="text-white bg-green-600 text-center rounded-lg py-1 mt-3 cursor-pointer  text-lg font-semibold">
+        <div
+          onClick={() => navigate('/address')}
+          className="text-white bg-green-600 text-center rounded-lg py-1 mt-3 cursor-pointer  text-lg font-semibold"
+        >
           PROCEED
         </div>
       </div>

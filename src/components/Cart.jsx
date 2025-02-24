@@ -1,15 +1,18 @@
+import Header from './Header';
+import CartData from './CartData';
 
-import Header from "./Header";
-import CartData from "./CartData";
 
-const Cart =  () =>{
+const Cart = () => {
+ 
+
+
 
   return (
     <div>
-      <Header/>
-      <CartData/>
+      <Header />
+      <CartData />
     </div>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;

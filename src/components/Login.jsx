@@ -75,7 +75,7 @@ const Login = () => {
         <div className="flex justify-center mt-3">
           <button
             onClick={handleLogin}
-            className="mx-auto mt-2 py-2 px-12 rounded-2xl bg-green-600 font-bold text-white text-xl"
+            className="mx-auto mt-2 py-2 px-12 cursor-pointer rounded-2xl bg-green-600 font-bold text-white text-xl"
           >
             Login
           </button>
