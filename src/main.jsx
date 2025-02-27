@@ -35,6 +35,8 @@ const Applayout = () => {
     }
     try {
 
+      console.log("🔹 Sending request with token:", token);
+
       const res = await axios.get('https://goalgear.onrender.com/profile/view', {
         headers: {
           Authorization: `Bearer ${token}`, // Send token in the request
