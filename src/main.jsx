@@ -28,7 +28,7 @@ const Applayout = () => {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/profile/view', {
+      const res = await axios.get('https://goalgear.onrender.com/profile/view', {
         withCredentials: true,
       });
       console.log(res.data);
