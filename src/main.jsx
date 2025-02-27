@@ -30,6 +30,9 @@ const Applayout = () => {
     try {
       const res = await axios.get('https://goalgear.onrender.com/profile/view', {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, 
+        }
       });
       console.log(res.data);
       dispatch(addUser(res.data));
