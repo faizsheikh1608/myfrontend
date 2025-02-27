@@ -14,7 +14,7 @@ const CartData = () => {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/cart/getItems', {
+      const res = await axios.get('https://goalgear.onrender.com/cart/getItems', {
         withCredentials: true,
       });
 
@@ -36,7 +36,7 @@ const CartData = () => {
       setData(updatedItems.length > 0 ? updatedItems : null);
 
       // Send the delete request to the server
-      await axios.delete(`http://localhost:3000/cart/removeItem/${productId}`, {
+      await axios.delete(`https://goalgear.onrender.com/cart/removeItem/${productId}`, {
         withCredentials: true,
       });
     } catch (err) {

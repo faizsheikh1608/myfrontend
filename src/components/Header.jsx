@@ -12,7 +12,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:3000/logout',{}, { withCredentials: true });
+      await axios.post('https://goalgear.onrender.com/logout',{}, { withCredentials: true });
       dispatch(removeUsers());
     } catch (err) {
       console.log(err);

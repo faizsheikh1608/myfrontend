@@ -14,7 +14,7 @@ const Items = ({ item, setTotal, removeItem }) => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/product/${item.productId}`,
+          `https://goalgear.onrender.com/product/${item.productId}`,
           { withCredentials: true }
         );
         setData(res.data.product);

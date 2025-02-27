@@ -22,7 +22,7 @@ const Category = () => {
   const handlecategory = async (category) => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/filter/product?category=${category}`,
+        `https://goalgear.onrender.com/filter/product?category=${category}`,
         { withCredentials: true }
       );
       console.log(res.data.product);

@@ -26,7 +26,7 @@ const Signup = () => {
       }
 
     await axios.post(
-        'http://localhost:3000/signup',
+        'https://goalgear.onrender.com/signup',
         {
           firstName,
           lastName,

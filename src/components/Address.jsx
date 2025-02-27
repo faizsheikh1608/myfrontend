@@ -47,7 +47,7 @@ const Address = () => {
     }
 
     try {
-      const { data } = await axios.post('http://localhost:3000/create-order', {
+      const { data } = await axios.post('https://goalgear.onrender.com/create-order', {
         amount: `${total}`, // Set the amount dynamically as needed
         currency: 'INR',
       });
@@ -61,12 +61,12 @@ const Address = () => {
         order_id: data.id,
         handler: async function (response) {
           const verifyResponse = await axios.post(
-            'http://localhost:3000/verify-payment',
+            'https://goalgear.onrender.com/verify-payment',
             response
           );
           if (verifyResponse.data.success) {
             alert('Payment successful!');
-            await axios.delete('http://localhost:3000/cart/clear', {
+            await axios.delete('https://goalgear.onrender.com/cart/clear', {
               withCredentials: true,
             });
             navigate('/');

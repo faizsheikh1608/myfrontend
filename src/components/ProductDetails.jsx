@@ -18,7 +18,7 @@ const ProductDetails = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/product/${productId}`
+        `https://goalgear.onrender.com/product/${productId}`
       );
       console.log(response.data.product);
       setProduct(response.data.product);
@@ -49,7 +49,7 @@ const ProductDetails = () => {
   const handleAdd = async () => {
     try {
       const res = await axios.post(
-        `http://localhost:3000/cart/addItem`,
+        `https://goalgear.onrender.com/cart/addItem`,
         {
           productId: productId,
           status: 'notPlaced',

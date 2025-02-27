@@ -17,7 +17,7 @@ const Product = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/allProducts');
+      const response = await axios.get('https://goalgear.onrender.com/allProducts');
 
       dispatch(setData(response.data.product));
     } catch (err) {
