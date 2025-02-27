@@ -24,6 +24,9 @@ const Login = () => {
           withCredentials: true,
         }
       );
+
+      localStorage.setItem("token", res.data.token);
+
       dispatch(addUser(res.data.user))
       navigate("/")
     } catch (err) {

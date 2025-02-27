@@ -27,9 +27,18 @@ const Applayout = () => {
   const dispatch = useDispatch();
 
   const fetchUser = async () => {
+    const token = localStorage.getItem("token"); // Retrieve token
+
+    if (!token) {
+      console.error("No token found, user not logged in");
+      return;
+    }
     try {
 
       const res = await axios.get('https://goalgear.onrender.com/profile/view', {
+        headers: {
+          Authorization: `Bearer ${token}`, // Send token in the request
+        },
         withCredentials: true,
       });
       console.log(res.data);
