@@ -24,7 +24,7 @@ const Login = () => {
           withCredentials: true,
         }
       );
-
+      console.log("✅ Login Success. Response:", res.data);
       localStorage.setItem("token", res.data.token);
 
       dispatch(addUser(res.data.user))

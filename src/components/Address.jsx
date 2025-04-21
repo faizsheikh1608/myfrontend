@@ -1,21 +1,11 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
-const loadRazorpayScript = () => {
-  return new Promise((resolve) => {
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
-};
+import { useNavigate } from 'react-router-dom';
 
 const Address = () => {
+  const total = useSelector((store) => store.total);
   const navigate = useNavigate();
-  const total = useSelector((store) => store.total)
 
   const [formData, setFormData] = useState({
     street: '',
@@ -36,58 +26,65 @@ const Address = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  //Payment
   const loadRazorpay = async () => {
-    const scriptLoaded = await loadRazorpayScript(); // ✅ Ensure script loads before calling Razorpay
-
-    if (!scriptLoaded) {
-      console.log(
-        'Razorpay SDK failed to load. Check your internet connection.'
-      );
-      return;
-    }
-
     try {
-      const { data } = await axios.post('https://goalgear.onrender.com/create-order', {
-        amount: `${total}`, // Set the amount dynamically as needed
-        currency: 'INR',
-      });
+      const order = await axios.post(
+        'https://goalgear.onrender.com/create-order',
+        {
+          amount: total, // Set the amount dynamically as needed
+          currency: 'INR',
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      const { amount, currency, orderId, notes } = order.data.data;
 
       const options = {
-        key: 'rzp_test_lpRLO1HXfCrVeN', // Replace with your Razorpay Key ID
-        amount: data.amount,
-        currency: data.currency,
+        key: 'rzp_test_lpRLO1HXfCrVeN',
+        amount: amount,
+        currency: currency,
         name: 'GoalGear',
         description: 'Purchase of Football Accessories',
-        order_id: data.id,
-        handler: async function (response) {
-          const verifyResponse = await axios.post(
-            'https://goalgear.onrender.com/verify-payment',
-            response
-          );
-          if (verifyResponse.data.success) {
-            alert('Payment successful!');
-            await axios.delete('https://goalgear.onrender.com/cart/clear', {
-              withCredentials: true,
-            });
-            navigate('/');
-          } else {
-            alert('Payment failed!');
-          }
-        },
+        order_id: orderId,
         prefill: {
-          name: 'Faiz Sheikh',
-          email: 'sheikhfaiz7861@gmail.com',
+          name: notes.name,
+          email: notes.emailId,
           contact: '8390438280',
         },
         theme: {
           color: '#3399cc',
         },
+        handler: async function () {
+          const data = await axios.post(
+            'https://goalgear.onrender.com/payment/status',
+            {},
+            {
+              params: {
+                orderId,
+              },
+              withCredentials: true,
+            }
+          );
+
+          console.log(data.data.payment);
+
+          if (data.data.payment) {
+            alert('Payment Successful!');
+            navigate('/');
+          } else {
+            alert('Payment Failed. Please try again.');
+            navigate('/cart');
+          }
+        },
       };
 
       const razorpay = new window.Razorpay(options);
-      razorpay.open();
+      razorpay.open(); // This will open Razorpay Dioluge box
     } catch (error) {
-      console.log('Payment Error:', error);
+      console.log('Error : ', error);
     }
   };
 
