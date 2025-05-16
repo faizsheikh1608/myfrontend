@@ -6,7 +6,7 @@ const Order = () => {
 
   const fetchOrder = async () => {
     try {
-      const data = await axios.get('http://localhost:3000/orders', {
+      const data = await axios.get('https://goalgear.onrender.com/orders', {
         withCredentials: true,
       });
       setOrder(data);
