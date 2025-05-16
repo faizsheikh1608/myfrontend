@@ -1,5 +1,5 @@
 import './index.css';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 
@@ -22,27 +22,30 @@ import Terms from './components/Terms';
 import Refund from './components/Refund';
 import Cancellation from './components/Cancellation';
 import Address from './components/Address';
+import Order from './components/Order';
 
 const Applayout = () => {
   const dispatch = useDispatch();
 
   const fetchUser = async () => {
-    const token = localStorage.getItem("token"); // Retrieve token
+    const token = localStorage.getItem('token'); // Retrieve token
 
     if (!token) {
-      console.error("No token found, user not logged in");
+      console.error('No token found, user not logged in');
       return;
     }
     try {
+      console.log('🔹 Sending request with token:', token);
 
-      console.log("🔹 Sending request with token:", token);
-
-      const res = await axios.get('https://goalgear.onrender.com/profile/view', {
-        headers: {
-          Authorization: `Bearer ${token}`, // Send token in the request
-        },
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        'https://goalgear.onrender.com/profile/view',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send token in the request
+          },
+          withCredentials: true,
+        }
+      );
       console.log(res.data);
       dispatch(addUser(res.data));
     } catch (err) {
@@ -82,9 +85,9 @@ const router = createBrowserRouter([
         element: <ProductDetails />,
       },
       {
-        path : '/address',
-        element : <Address/>
-      },  
+        path: '/address',
+        element: <Address />,
+      },
     ],
   },
   {
@@ -114,6 +117,10 @@ const router = createBrowserRouter([
   {
     path: '/cancel',
     element: <Cancellation />,
+  },
+  {
+    path: '/order',
+    element: <Order />,
   },
 ]);
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 import ProductItems from './ProductItems';
 import { Link } from 'react-router-dom';
@@ -17,7 +17,9 @@ const Product = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('https://goalgear.onrender.com/allProducts');
+      const response = await axios.get(
+        'https://goalgear.onrender.com/allProducts'
+      );
 
       dispatch(setData(response.data.product));
     } catch (err) {
@@ -30,12 +32,14 @@ const Product = () => {
   }
 
   return (
-    <div className="my-10 mx-[80px] flex gap-[18px] flex-wrap">
-      {productData.map((data) => (
-        <Link key={data._id} to={`/product/${data._id}`}>
-          <ProductItems productData={data} />
-        </Link>
-      ))}
+    <div className="w-full flex justify-center">
+      <div className="my-10 flex gap-[18px] flex-wrap justify-center max-w-[1200px]">
+        {productData.map((data) => (
+          <Link key={data._id} to={`/product/${data._id}`}>
+            <ProductItems productData={data} />
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };

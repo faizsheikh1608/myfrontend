@@ -8,11 +8,15 @@ const Header = () => {
   const user = useSelector((store) => store.user);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await axios.post('https://goalgear.onrender.com/logout',{}, { withCredentials: true });
+      await axios.post(
+        'https://goalgear.onrender.com/logout',
+        {},
+        { withCredentials: true }
+      );
       dispatch(removeUsers());
     } catch (err) {
       console.log(err);
@@ -21,7 +25,12 @@ const Header = () => {
 
   return (
     <div className="h-[100px]  w-full flex justify-between items-center p-0 m-0 shadow-lg">
-      <div className="w-[400px]  flex justify-start items-center relative p-0 m-0 cursor-pointer" onClick={() => {navigate("/")}}>
+      <div
+        className="w-[400px]  flex justify-start items-center relative p-0 m-0 cursor-pointer"
+        onClick={() => {
+          navigate('/');
+        }}
+      >
         <img
           className="w-[280px] h-full  object-cover"
           src="/images/White.png"
@@ -39,8 +48,10 @@ const Header = () => {
         </div>
       </div>
       <div className="pr-[10px] flex gap-2 items-center">
-        
-        <div onClick={() => user ? navigate('/cart') : navigate('/login') } className="bg-green-600 py-[6px] px-5 text-xl rounded-2xl cursor-pointer text-white">
+        <div
+          onClick={() => (user ? navigate('/cart') : navigate('/login'))}
+          className="bg-green-600 py-[6px] px-5 text-xl rounded-2xl cursor-pointer text-white"
+        >
           Cart <i className="bi bi-cart4 "></i>
         </div>
         {user ? (
@@ -51,12 +62,18 @@ const Header = () => {
           >
             <i className="bi bi-person-circle text-[32px] px-5 cursor-pointer"></i>
             {isOpen && (
-              <ul className="absolute right-0 mt-2 w-40 bg-white text-black rounded-lg shadow-lg">
+              <ul className="absolute top-10 right-0 mt-1  w-40 bg-white text-black rounded-lg shadow-lg">
                 <li
                   className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
                   onClick={handleLogout}
                 >
                   Logout
+                </li>
+                <li
+                  className="px-4 py-2 hover:bg-gray-200 hover:rounded-b-lg cursor-pointer"
+                  onClick={() => navigate('/order')}
+                >
+                  Order
                 </li>
               </ul>
             )}
