@@ -22,7 +22,6 @@ const Order = () => {
 
   return (
     <div>
-      <Order />
       <h2>My Order</h2>
     </div>
   );
