@@ -9,7 +9,7 @@ const Order = () => {
       const data = await axios.get('https://goalgear.onrender.com/orders', {
         withCredentials: true,
       });
-      console.log(order);
+      console.log(data);
       setOrder(data);
     } catch (err) {
       console.log(err);
