@@ -9,7 +9,7 @@ const Category = () => {
   //handel All
   const handleAll = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/allProducts', {
+      const res = await axios.get('https://goalgear.onrender.com/allProducts', {
         withCredentials: true,
       });
       dispatch(setData(res.data.product));

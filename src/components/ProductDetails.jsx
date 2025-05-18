@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const ProductDetails = () => {
@@ -7,6 +7,8 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const [productSize, setProductSize] = useState('');
   const [showImage, setShowImage] = useState('');
+  const [added, setAdded] = useState(false);
+  const navigate = useNavigate();
 
   const { productId } = useParams();
 
@@ -48,6 +50,11 @@ const ProductDetails = () => {
   //handle add to cart
   const handleAdd = async () => {
     try {
+      if (productSize.length === 0) {
+        alert('Please Select Size !');
+        return;
+      }
+
       const res = await axios.post(
         `https://goalgear.onrender.com/cart/addItem`,
         {
@@ -58,14 +65,19 @@ const ProductDetails = () => {
         },
         { withCredentials: true }
       );
-      console.log(res)
+
+      if (res) {
+        setAdded(true);
+      }
+      setProductSize('');
+      console.log(res);
     } catch (err) {
       console.log(err);
     }
   };
 
   return (
-    <div className="flex gap-8 my-8 mx-28">
+    <div className="relative flex gap-8 my-8 mx-28">
       <div className="w-6/12 h-svh object-cover rounded-3xl shadow-lg relative">
         <img
           alt="product"
@@ -175,6 +187,25 @@ const ProductDetails = () => {
           </ul>
         </div>
       </div>
+
+      {added && (
+        <div className="absolute inset-0 fixed   flex justify-center items-center bg-black/20">
+          <div className="bg-white text-center w-[28%] h-4/12 rounded-xl">
+            <p className="text-xl  mt-12 font-bold">
+              Successfully added to the cart.
+            </p>
+            <button
+              className="mt-4 py-2 px-2 bg-green-800 text-lg text-white rounded-lg cursor-pointer"
+              onClick={() => {
+                navigate('/');
+                setAdded(false);
+              }}
+            >
+              Continue Shoping
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import axios from 'axios';
 import { removeUsers } from '../utils/userSlice';
+import { setData } from '../utils/productSlice';
 
 const Header = () => {
   const user = useSelector((store) => store.user);
   const [isOpen, setIsOpen] = useState(false);
+  const [searchText, setSearchText] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -21,6 +23,22 @@ const Header = () => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  //handel Search
+  const handleSearch = async (e) => {
+    if (!searchText.trim()) return;
+    const data = await axios.get(
+      `https://goalgear.onrender.com/search/product?query=${searchText}`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    dispatch(setData(data.data.products));
+
+    setSearchText('');
+    navigate('/');
   };
 
   return (
@@ -41,10 +59,12 @@ const Header = () => {
         <input
           type="search"
           placeholder="Search"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
           className="w-10/12 border-[1px] rounded-l-2xl p-2 pl-4 outline-none text-base border-gray-200 border-r-0"
         ></input>
-        <div>
-          <i className="bi bi-search bg-gray-100 text-2xl py-[6px] px-5 rounded-r-2xl"></i>
+        <div onClick={handleSearch}>
+          <i className="bi bi-search bg-gray-100 text-2xl py-[6px] px-5 rounded-r-2xl cursor-pointer"></i>
         </div>
       </div>
       <div className="pr-[10px] flex gap-2 items-center">

@@ -12,7 +12,9 @@ const Product = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchData();
+    if (productData.length === 0) {
+      fetchData();
+    }
   }, []);
 
   const fetchData = async () => {
