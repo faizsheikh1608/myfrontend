@@ -1,4 +1,3 @@
-
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
@@ -13,22 +12,21 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-    
       const res = await axios.post(
         'https://goalgear.onrender.com/login',
         {
-          emailId : email,
+          emailId: email,
           password,
         },
         {
           withCredentials: true,
         }
       );
-      console.log("✅ Login Success. Response:", res.data);
-      localStorage.setItem("token", res.data.token);
+      console.log('✅ Login Success. Response:', res.data);
+      localStorage.setItem('token', res.data.token);
 
-      dispatch(addUser(res.data.user))
-      navigate("/")
+      dispatch(addUser(res.data.user));
+      navigate('/');
     } catch (err) {
       console.log(err.message);
     }

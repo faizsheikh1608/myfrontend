@@ -1,12 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { removeUsers } from '../utils/userSlice';
-import { setData } from '../utils/productSlice';
+import { setData, setIsSearching } from '../utils/productSlice';
 
 const Header = () => {
-  const user = useSelector((store) => store.user);
+  //const user = useSelector((store) => store.user);
+  const [user, setUser] = useState(useSelector((store) => store.user));
   const [isOpen, setIsOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
   const dispatch = useDispatch();
@@ -19,14 +20,18 @@ const Header = () => {
         {},
         { withCredentials: true }
       );
+      console.log('Logout');
       dispatch(removeUsers());
+      localStorage.removeItem('token');
+      setUser(null);
+      navigate('/');
     } catch (err) {
       console.log(err);
     }
   };
 
   //handel Search
-  const handleSearch = async (e) => {
+  const handleSearch = async () => {
     if (!searchText.trim()) return;
     const data = await axios.get(
       `https://goalgear.onrender.com/search/product?query=${searchText}`,
@@ -36,10 +41,14 @@ const Header = () => {
     );
 
     dispatch(setData(data.data.products));
+    dispatch(setIsSearching(true));
 
     setSearchText('');
     navigate('/');
   };
+  useEffect(() => {
+    setUser(localStorage.getItem('token'));
+  }, []);
 
   return (
     <div className="h-[100px]  w-full flex justify-between items-center p-0 m-0 shadow-lg">
@@ -47,6 +56,7 @@ const Header = () => {
         className="w-[400px]  flex justify-start items-center relative p-0 m-0 cursor-pointer"
         onClick={() => {
           navigate('/');
+          dispatch(setIsSearching(false));
         }}
       >
         <img
