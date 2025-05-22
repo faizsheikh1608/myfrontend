@@ -1,4 +1,11 @@
-const Pagination = ({ currentPage, setcurrentPage, totalPage }) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { setcurrentPage } from '../utils/productSlice';
+
+const Pagination = () => {
+  const currentPage = useSelector((store) => store.product.currentPage);
+  const totalPage = useSelector((store) => store.product.totalPage);
+  const dispatch = useDispatch();
+
   const generatePagination = () => {
     let page = [];
     if (currentPage > 0) page.push(1);
@@ -47,21 +54,25 @@ const Pagination = ({ currentPage, setcurrentPage, totalPage }) => {
   return (
     <div className="flex gap-4 justify-center">
       <button
-        disabled={currentPage === 0}
+        disabled={currentPage === 1}
         className={`border-1 rounded-lg py-1 px-3 text-lg font-bold my-2 
         ${
           currentPage === 1
             ? 'cursor-not-allowed bg-gray-300 text-white'
             : 'hover:bg-gray-500 hover:text-white'
         } `}
-        onClick={() => setcurrentPage((prev) => prev - 1)}
+        onClick={() => dispatch(setcurrentPage(currentPage - 1))}
       >
         Prev
       </button>
       <div className="flex gap-4">
         {generatePagination().map((ele, idx) => {
           if (ele === '...') {
-            return <button className="text-xl font-bold" key={idx}>{ele}</button>;
+            return (
+              <button className="text-xl font-bold" key={idx}>
+                {ele}
+              </button>
+            );
           }
           return (
             <button
@@ -71,7 +82,7 @@ const Pagination = ({ currentPage, setcurrentPage, totalPage }) => {
                   : 'hover:bg-gray-500 hover:text-white'
               }`}
               key={idx}
-              onClick={() => setcurrentPage(ele)}
+              onClick={() => dispatch(setcurrentPage(ele))}
             >
               {ele}
             </button>
@@ -86,7 +97,7 @@ const Pagination = ({ currentPage, setcurrentPage, totalPage }) => {
             ? 'cursor-not-allowed bg-gray-300 text-white'
             : 'hover:bg-gray-500 hover:text-white'
         } `}
-        onClick={() => setcurrentPage((prev) => prev + 1)}
+        onClick={() => dispatch(setcurrentPage(currentPage + 1))}
       >
         Next
       </button>

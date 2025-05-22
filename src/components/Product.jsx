@@ -3,7 +3,7 @@ import axios from 'axios';
 import ProductItems from './ProductItems';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setData } from '../utils/productSlice';
+import { setData, setTotalPage } from '../utils/productSlice';
 import ShimmerUI from './ShimmerUI';
 import Pagination from './Pagination';
 
@@ -11,8 +11,8 @@ const Product = () => {
   //const [productData, setProductData] = useState([]);
   const productData = useSelector((store) => store.product.items);
   const isSearching = useSelector((store) => store.product.isSearching);
-  const [totalPage, setTotalPages] = useState(0);
-  const [currentPage, setcurrentPage] = useState(1);
+  //const totalPage = useSelector((store) => store.product.totalPage);
+  const currentPage = useSelector((store) => store.product.currentPage);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const Product = () => {
       );
       console.log(response.data);
       dispatch(setData(response.data.product));
-      setTotalPages(response.data.totalPages);
+      dispatch(setTotalPage(response.data.totalPages));
     } catch (err) {
       console.log('Error : ', err.message);
     }
@@ -48,11 +48,7 @@ const Product = () => {
         </div>
       </div>
       <div>
-        <Pagination
-          currentPage={currentPage}
-          setcurrentPage={setcurrentPage}
-          totalPage={totalPage}
-        />
+        <Pagination />
       </div>
     </div>
   );

@@ -1,18 +1,25 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import axios from 'axios';
-import { setData } from '../utils/productSlice';
+import { setcurrentPage, setData, setTotalPage } from '../utils/productSlice';
 
 const Category = () => {
   const dispatch = useDispatch();
+  const currentPage = useSelector((store) => store.product.currentPage);
 
   //handel All
   const handleAll = async () => {
     try {
-      const res = await axios.get('https://goalgear.onrender.com/allProducts', {
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `https://goalgear.onrender.com/allProducts?page=${currentPage}`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(res.data);
       dispatch(setData(res.data.product));
+      dispatch(setTotalPage(res.data.totalPages));
+      dispatch(setcurrentPage(1));
     } catch (err) {
       console.log(err);
     }
@@ -22,11 +29,14 @@ const Category = () => {
   const handlecategory = async (category) => {
     try {
       const res = await axios.get(
-        `https://goalgear.onrender.com/filter/product?category=${category}`,
+        `https://goalgear.onrender.com/filter/product?category=${category}&page=${currentPage}`,
         { withCredentials: true }
       );
-      console.log(res.data.product);
+
       dispatch(setData(res.data.product));
+      dispatch(setTotalPage(res.data.totalPages));
+
+      dispatch(setcurrentPage(res.data.currentPage));
     } catch (err) {
       console.log(err);
     }
