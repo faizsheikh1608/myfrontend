@@ -7,8 +7,8 @@ const ProductItems = (props) => {
   const price = productData.price;
 
   return (
-    <div className="w-[250px] h-[400px]  mb-4 relative shadow-md">
-      <div className="relative  cursor-pointer rounded-xl">
+    <div className="w-[250px] h-[400px]  mb-4 relative shadow-md hover:scale-104 hover:transition-transform">
+      <div className="relative  cursor-pointer rounded-xl ">
         <img
           className="rounded-xl w-full h-[250px] object-cover transition-opacity duration-500 ease-in-out "
           alt="Product"

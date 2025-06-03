@@ -2,12 +2,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { removeUsers } from '../utils/userSlice';
-import { setData, setIsSearching } from '../utils/productSlice';
+import { removeUsers, addUser } from '../utils/userSlice';
+import {
+  setcurrentPage,
+  setData,
+  setIsSearching,
+  setTotalPage,
+} from '../utils/productSlice';
 
 const Header = () => {
   //const user = useSelector((store) => store.user);
-  const [user, setUser] = useState(useSelector((store) => store.user));
+  const user = useSelector((store) => store.user);
   const [isOpen, setIsOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
   const dispatch = useDispatch();
@@ -20,10 +25,9 @@ const Header = () => {
         {},
         { withCredentials: true }
       );
-      console.log('Logout');
-      dispatch(removeUsers());
+
       localStorage.removeItem('token');
-      setUser(null);
+      dispatch(removeUsers());
       navigate('/');
     } catch (err) {
       console.log(err);
@@ -40,14 +44,18 @@ const Header = () => {
       }
     );
 
+    console.log(data?.data);
+
     dispatch(setData(data.data.products));
     dispatch(setIsSearching(true));
+    dispatch(setTotalPage(data?.data?.totalPages));
+    dispatch(setcurrentPage(data?.data?.currentPage));
 
     setSearchText('');
     navigate('/');
   };
   useEffect(() => {
-    setUser(localStorage.getItem('token'));
+    dispatch(addUser(localStorage.getItem('token')));
   }, []);
 
   return (

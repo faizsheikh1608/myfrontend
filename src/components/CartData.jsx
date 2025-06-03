@@ -14,9 +14,12 @@ const CartData = () => {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get('https://goalgear.onrender.com/cart/getItems', {
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        'https://goalgear.onrender.com/cart/getItems',
+        {
+          withCredentials: true,
+        }
+      );
 
       console.log(res.data.items);
       setData(res.data.items);
@@ -36,9 +39,12 @@ const CartData = () => {
       setData(updatedItems.length > 0 ? updatedItems : null);
 
       // Send the delete request to the server
-      await axios.delete(`https://goalgear.onrender.com/cart/removeItem/${productId}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `https://goalgear.onrender.com/cart/removeItem/${productId}`,
+        {
+          withCredentials: true,
+        }
+      );
     } catch (err) {
       console.log(err);
       fetchData();
@@ -50,8 +56,7 @@ const CartData = () => {
   }
 
   return (
-   
-     <div className="flex justify-evenly gap-8  p-6">
+    <div className="flex justify-evenly gap-8  p-6">
       <div id="items" className="w-[700px]">
         {data.map((items) => {
           return (
