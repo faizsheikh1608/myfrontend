@@ -16,12 +16,11 @@ const Order = () => {
     try {
       const res = await axios.get(
         `https://goalgear.onrender.com/orders?page=${currentPage}`,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
 
-      const orderArr = res?.data?.data;
+      const orderArr = res?.data?.data || [];
+
       setOrder((prev) => {
         const existingKeys = new Set(prev.map((o) => `${o.orderId}-${o._id}`));
         const filteredNewOrders = orderArr.filter(
@@ -30,9 +29,9 @@ const Order = () => {
         return [...prev, ...filteredNewOrders];
       });
 
-      setTotalPage(res?.data?.totalPages);
+      setTotalPage(res?.data?.totalPages || 1);
     } catch (err) {
-      console.log(err);
+      console.error('Fetch Orders Error:', err.response?.data || err.message);
     }
   };
 
@@ -40,31 +39,35 @@ const Order = () => {
     if (!searchMode) {
       fetchOrder();
     }
-  }, [currentPage]);
+  }, [currentPage, searchMode]);
 
   const handleSearch = async () => {
+    if (!search.trim()) {
+      alert('Please enter something to search.');
+      return;
+    }
+
     try {
       const res = await axios.get(
-        `https://goalgear.onrender.com/search/order?query=${search}`,
-        {
-          withCredentials: true,
-        }
+        `https://goalgear.onrender.com/search/order?query=${encodeURIComponent(
+          search
+        )}`,
+        { withCredentials: true }
       );
-      console.log(res.data);
-      setOrder(res.data.orders);
-      setTotalPage(res.data.totalPages);
+
+      setOrder(res.data.orders || []);
+      setTotalPage(res.data.totalPages || 1);
       setCurrentPage(res.data.currentPage || 1);
       setSearchMode(true);
     } catch (err) {
-      console.log(err);
+      console.error('Search Error:', err.response?.data || err.message);
     }
   };
 
-  const resetSearch = () => {
-    setSearch('');
-    setOrder([]);
-    setCurrentPage(1);
-    setSearchMode(false);
+  const handleShowMore = () => {
+    if (!searchMode) {
+      setCurrentPage((prev) => prev + 1);
+    }
   };
 
   return (
@@ -81,26 +84,18 @@ const Order = () => {
           />
           <button
             onClick={handleSearch}
-            className="bg-black text-white font-bold py-1 px-3 rounded-2xl"
+            className="bg-black text-white font-bold py-1 px-3 cursor-pointer rounded-2xl"
           >
             Search
           </button>
-          {searchMode && (
-            <button
-              onClick={resetSearch}
-              className="bg-gray-700 text-white font-bold py-1 px-3 rounded-2xl"
-            >
-              Reset
-            </button>
-          )}
         </div>
 
-        {order && order.length === 0 ? (
+        {order.length === 0 ? (
           <div>
-            <p className="text-4xl text-center mt-34 font-bold">No Orders</p>
+            <p className="text-4xl text-center mt-10 font-bold">No Orders</p>
             <div className="flex justify-center">
               <button
-                className="text-xl py-1 px-3 bg-green-800 text-white mt-2 rounded-lg"
+                className="text-xl py-1 px-3 bg-green-800 text-white mt-2 cursor-pointer rounded-lg"
                 onClick={() => navigate('/')}
               >
                 Go To Store
@@ -114,18 +109,18 @@ const Order = () => {
             </div>
           ))
         )}
-      </div>
 
-      {!searchMode && totalPage > currentPage && (
-        <div className="flex justify-center mb-4">
-          <button
-            onClick={() => setCurrentPage((prev) => prev + 1)}
-            className="border py-1 px-3 rounded-2xl text-lg font-bold hover:bg-gray-500 hover:text-white"
-          >
-            Show More
-          </button>
-        </div>
-      )}
+        {!searchMode && totalPage > currentPage && (
+          <div className="flex justify-center mb-4">
+            <button
+              onClick={handleShowMore}
+              className="border py-1 px-3 rounded-2xl text-lg font-bold hover:bg-gray-500 hover:text-white cursor-pointer"
+            >
+              Show More
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
