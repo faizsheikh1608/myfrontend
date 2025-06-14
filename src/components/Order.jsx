@@ -49,13 +49,11 @@ const Order = () => {
 
     try {
       const res = await axios.get(
-        `https://goalgear.onrender.com/search/order?query=${encodeURIComponent(
-          search
-        )}`,
+        `https://goalgear.onrender.com/search/order?query=${search}`,
         { withCredentials: true }
       );
 
-      setOrder(res.data.orders || []);
+      setOrder(res.data.data || []);
       setTotalPage(res.data.totalPages || 1);
       setCurrentPage(res.data.currentPage || 1);
       setSearchMode(true);
