@@ -50,10 +50,10 @@ const Order = () => {
         withCredentials: true,
       }
     );
-    console.log( data);
-    //setOrder(data.data.orders);
-    //setTotalPage(data.data.totalPages);
-    //setcurrentPage(data.data.currentPage);
+    console.log(data);
+    setOrder(data.data.data);
+    setTotalPage(data.data.totalPages);
+    setcurrentPage(data.data.currentPage);
   };
 
   return (
