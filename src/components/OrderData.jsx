@@ -23,7 +23,7 @@ const OrderData = ({ date, data }) => {
     <div className="flex relative gap-7  my-[40px] border w-full  h-[250px] rounded-xl overflow-hidden object-cover shadow-lg">
       <div className="h-full w-[30%]">
         <img
-          src={data?.mainImageUrl}
+          src={data?.mainImageUrl || data?}
           alt="Product"
           className="w-full h-full object-cover object-fill"
         />
