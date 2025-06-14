@@ -9,6 +9,7 @@ const Order = () => {
   const [currentPage, setcurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const navigate = useNavigate();
+  const [search, setSearch] = useState('');
 
   const fetchOrder = async () => {
     try {
@@ -23,29 +24,54 @@ const Order = () => {
 
       const orderArr = data?.data?.data;
       setOrder((prev) => {
-  const existingKeys = new Set(prev.map((o) => `${o.orderId}-${o._id}`));
+        const existingKeys = new Set(prev.map((o) => `${o.orderId}-${o._id}`));
 
-  const filteredNewOrders = orderArr.filter(
-    (o) => !existingKeys.has(`${o.orderId}-${o._id}`)
-  );
+        const filteredNewOrders = orderArr.filter(
+          (o) => !existingKeys.has(`${o.orderId}-${o._id}`)
+        );
 
-  return [...prev, ...filteredNewOrders];
-});
+        return [...prev, ...filteredNewOrders];
+      });
       setTotalPage(data?.data?.totalPages);
     } catch (err) {
       console.log(err);
     }
   };
-  
+
   useEffect(() => {
     console.log(order);
     fetchOrder();
   }, [currentPage]);
 
+  const handleclick = async () => {
+    const data = await axios(
+      `http://goalgear.onrender.com/search/order?query=${search}`,
+      {
+        withCredentials: true,
+      }
+    );
+    console.log('Order : ', data);
+  };
+
   return (
     <div>
       <Header />
       <div className="w-7/12 mx-auto">
+        <div className="flex gap-4 justify-center my-5  mx-auto">
+          <input
+            type="search"
+            placeholder="Search order..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-[480px] p-2 border border-gray-400 rounded-2xl "
+          ></input>
+          <button
+            onClick={handleclick}
+            className="bg-black text-white font-bold py-1 px-3 cursor-pointer rounded-2xl"
+          >
+            Search
+          </button>
+        </div>
         {order && order.length === 0 ? (
           <div>
             <p className="text-4xl text-center mt-34 font-bold">No Orders </p>
@@ -61,10 +87,7 @@ const Order = () => {
         ) : (
           order.map((ele) => (
             <div key={ele._id}>
-             
-                  <OrderData key={ele._id} date={ele.
-orderCreatedAt} data={ele} />
-              
+              <OrderData key={ele._id} date={ele.orderCreatedAt} data={ele} />
             </div>
           ))
         )}
