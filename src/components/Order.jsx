@@ -45,7 +45,7 @@ const Order = () => {
 
   const handleclick = async () => {
     const data = await axios(
-      `http://goalgear.onrender.com/search/order?query=${search}`,
+      `https://goalgear.onrender.com/search/order?query=${search}`,
       {
         withCredentials: true,
       }
